@@ -129,17 +129,16 @@ class VideoFileManager:
                     # Output: outputs/{filename} (flattens usually?) or outputs/{rel_path}? 
                     # Let's assume standard behavior: outputs/{subtitled_name}
                     if self.output_dir:
-                         # Default naming logic: list_name + _subtitled.mp4
-                         # But user can rename. We check for standard name first or check processed map?
-                         # For now, check standard name: {base_name}_subtitled.mp4 in OUTPUT root 
-                         # (since output logic often flattens, or user specific logic)
-                         # Based on current app logic: output path is usually just OUTPUT_DIR / ...
+                         # Preserve directory structure for output checking
+                         # rel_path is "Folder/Video.mp4"
+                         # output should be "Folder/Video_subtitled.mp4"
                          
-                         potential_output = f"{base_name}_subtitled.mp4"
-                         output_full = os.path.join(self.output_dir, potential_output)
+                         potential_output_rel = os.path.join(rel_dir, f"{base_name}_subtitled.mp4")
+                         output_full = os.path.join(self.output_dir, potential_output_rel)
+                         
                          if os.path.exists(output_full):
                              has_output = True
-                             output_file = potential_output
+                             output_file = potential_output_rel.replace("\\", "/")
 
                     videos.append({
                         "filename": rel_path_web,
