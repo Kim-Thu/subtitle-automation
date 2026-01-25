@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentation - Auto Subtitle Pro</title>
+    <link rel="stylesheet" href="/static/style.css?v=2">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+      <div class="nav-container">
+        <a href="/" class="brand">
+          <span>🎬</span> Subtitle Automation
+        </a>
+        <div class="nav-links">
+          <a href="/">Dashboard</a>
+          <a href="/documentation" class="active">Documentation</a>
+          <a href="/support">Support</a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container content-full">
+        <div class="page-header">
+            <h1>Documentation</h1>
+            <p>User Guide & Feature Reference</p>
+        </div>
+
+        <main class="content-card">
+            <section class="support-section">
+                <h2 class="support-heading accent">Getting Started</h2>
+                <p>Welcome to Auto Subtitle Pro. This tool automates the process of generating subtitles and dubbing for your videos.</p>
+                <ol class="faq-item" style="margin-left: 1.5rem; margin-top: 1rem;">
+                    <li>Place your video files in the <code>inputs</code> folder.</li>
+                    <li>Refresh the dashboard list.</li>
+                    <li>Select translation engine and target language.</li>
+                    <li>Click <b>Process</b> on individual videos or <b>Process All</b> for batch execution.</li>
+                </ol>
+            </section>
+
+            <section class="support-section">
+                <h2 class="support-heading accent">Translation Engines</h2>
+                <ul class="faq-item" style="list-style: none; padding: 0;">
+                    <li class="content-card" style="margin-bottom: 1rem; padding: 1rem;">
+                        <strong>Google Translate:</strong> Free, reliable, good for general purpose. No API key required.
+                    </li>
+                    <li class="content-card" style="margin-bottom: 1rem; padding: 1rem;">
+                        <strong>✨ Gemini AI:</strong> High quality, context-aware translations. Requires a Google AI Studio API Key.
+                    </li>
+                    <li class="content-card" style="margin-bottom: 1rem; padding: 1rem;">
+                        <strong>Ollama Local:</strong> Private, runs locally. Requires Ollama installed and running (default port 11434).
+                    </li>
+                </ul>
+            </section>
+
+            <section>
+                <h2 class="support-heading accent">Features</h2>
+                <ul class="faq-item" style="margin-left: 1.5rem;">
+                    <li><strong>Smart Subtitling:</strong> Uses OpenAI Whisper for accurate speech-to-text.</li>
+                    <li><strong>Auto Dubbing:</strong> Generates AI voiceovers using Microsoft Edge TTS (multilingual support).</li>
+                    <li><strong>Manual Scripting:</strong> You can supply your own script to correct transcription errors before translation.</li>
+                    <li><strong>Audio Merge:</strong> Automatically mixes the new dub track with the original background audio (ducking).</li>
+                </ul>
+            </section>
+        </main>
+
+    </div>
+    <div class="footer-wrapper">
+      <div class="nav-container">
+        <footer class="app-footer">
+            <p>&copy; 2026 Auto Subtitle Pro.</p>
+            <div class="footer-links">
+                <a href="/documentation" class="active">Documentation</a>
+                <span class="separator">|</span>
+                <a href="/support">Support</a>
+            </div>
+        </footer>
+      </div>
+    </div>
+</body>
+</html>

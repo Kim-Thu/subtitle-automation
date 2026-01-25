@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Support - Auto Subtitle Pro</title>
+    <link rel="stylesheet" href="/static/style.css?v=2">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+      <div class="nav-container">
+        <a href="/" class="brand">
+          <span>🎬</span> Subtitle Automation
+        </a>
+        <div class="nav-links">
+          <a href="/">Dashboard</a>
+          <a href="/documentation">Documentation</a>
+          <a href="/support" class="active">Support</a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container content-full">
+        <div class="page-header">
+            <h1>Support Center</h1>
+            <p>Troubleshooting & Help</p>
+        </div>
+
+        <main class="content-card">
+            <section class="support-section">
+                <h2 class="support-heading warning">Common Issues</h2>
+                
+                <div class="faq-item">
+                    <h3 class="faq-question">1. Videos not showing up?</h3>
+                    <p class="text-secondary">Ensure your video files are placed inside the <code>inputs</code> folder. Click the <b>Refresh List</b> button on the dashboard. The system supports .mp4, .mkv, .avi formats.</p>
+                </div>
+
+                <div class="faq-item">
+                    <h3 class="faq-question">2. Ollama translation failed?</h3>
+                    <p class="text-secondary">Make sure Ollama is installed and running on your machine. Run <code>ollama serve</code> in your terminal. Check if the model you selected (e.g. qwen:7b) is pulled via <code>ollama list</code>.</p>
+                </div>
+
+                <div class="faq-item">
+                    <h3 class="faq-question">3. Error during "Burning Subtitles"?</h3>
+                    <p class="text-secondary">This requires FFmpeg. Ensure FFmpeg is installed and added to your system PATH, or placed in the <code>bin</code> folder of the application.</p>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="support-heading accent">Contact Developer</h2>
+                <p class="text-secondary">For bug reports or feature requests, please check the console logs first by clicking the "Logs" button (if available) or checking the terminal window where the app is running.</p>
+                <br>
+                <a href="https://mail.google.com/mail/?view=cm&fs=1&to=support@autosubtitle.pro&su=Issue%20Report&body=Please%20describe%20your%20issue..." target="_blank" class="btn primary">Open in Gmail</a>
+                <p class="contact-info">Or email us at: support@autosubtitle.pro</p>
+            </section>
+        </main>
+
+    </div>
+    <div class="footer-wrapper">
+      <div class="nav-container">
+        <footer class="app-footer">
+            <p>&copy; 2026 Auto Subtitle Pro.</p>
+            <div class="footer-links">
+                <a href="/documentation">Documentation</a>
+                <span class="separator">|</span>
+                <a href="/support" class="active">Support</a>
+            </div>
+        </footer>
+      </div>
+    </div>
+</body>
+</html>
