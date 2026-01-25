@@ -166,6 +166,27 @@ body {
   max-height: calc(100vh - 150px); /* Leave room for footer */
   overflow-y: auto; /* Scrollable if too tall */
   z-index: 50;
+  
+  /* Custom Scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+.controls-panel::-webkit-scrollbar {
+  width: 5px;
+}
+
+.controls-panel::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.controls-panel::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 10px;
+}
+
+.controls-panel::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
 }
 
 .settings-grid {
