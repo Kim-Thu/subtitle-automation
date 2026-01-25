@@ -403,6 +403,7 @@ input[type='checkbox']:checked {
 
 /* Pagination */
 .pagination {
+  grid-column: 2; /* Sit under the table column */
   display: flex;
   align-items: center;
   justify-content: center;
