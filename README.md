@@ -1,36 +1,73 @@
-Auto Subtitle Automation Walkthrough
-I have successfully updated the solution to support multi-language translation (using deep-translator) and opaque background masking (using improved FFmpeg styling).
+# 🎬 Auto Subtitle Pro
 
-Changes Created
-auto*subtitle.py
-: Updated to:
-Transcribe: Detects source language (e.g., Chinese zh).
-Generate SRT: Creates [filename]\_original*[lang].srt.
-Translate: Translates text to target language (default: vi) and creates [filename]\_[target_lang].srt.
-Burn: Burns the translated subtitles with an opaque black box to cover original text.
-Usage
-To subtitle a video with Vietnamese translation (default):
+Auto Subtitle Pro là công cụ tự động hóa quy trình tạo phụ đề, dịch thuật và lồng tiếng (TTS) cho video. Hỗ trợ nhiều engine dịch thuật (Google, Gemini AI, Ollama) và tích hợp lồng tiếng đa ngôn ngữ.
 
-python auto_subtitle.py "path\to\video.mp4"
-To specify a different target language (e.g., English en):
+![Dashboard Preview](https://github.com/Kim-Thu/subtitle-automation/raw/main/static/demo.png)
 
-python auto_subtitle.py "path\to\video.mp4" --target_lang en
-To use a larger model for better accuracy:
+## 🌟 Tính năng nổi bật
 
-python auto_subtitle.py "path\to\video.mp4" --model medium
-Verification Results
-I verified the solution with the provided video:
-downloads\SaveTik.io_7580661279736614184.mp4
-.
+- **Tự động tạo phụ đề:** Sử dụng OpenAI Whisper để chuyển đổi giọng nói thành văn bản chính xác.
+- **Dịch thuật đa năng:** Hỗ trợ Google Translate, Gemini AI (chất lượng cao) và Ollama (chạy local bảo mật).
+- **Lồng tiếng AI (Dubbing):** Tự động tạo giọng đọc AI bằng Microsoft Edge TTS.
+- **Trộn âm thanh (Audio Merge):** Tự động mix giọng lồng tiếng với nhạc nền của video gốc.
+- **Chỉnh sửa thủ công:** Cho phép sửa lại kịch bản (Script) hoặc upload file SRT có sẵn.
+- **Quản lý file thông minh:** Mỗi video upload lên được lưu trong một thư mục riêng biệt tại `inputs/`.
 
-Output
-Input:
-downloads\SaveTik.io_7580661279736614184.mp4
-Detected Language: Chinese (zh)
-Original SRT:
-downloads\SaveTik.io_7580661279736614184_original_zh.srt
-Translated SRT:
-downloads\SaveTik.io_7580661279736614184_vi.srt
-Output Video:
-downloads\SaveTik.io_7580661279736614184_subtitled.mp4
-The video now contains Vietnamese subtitles inside an opaque black box, effectively covering the original hardcoded subtitles.
+## 🛠 Yêu cầu hệ thống
+
+- **Python:** 3.9 trở lên.
+- **FFmpeg:** Phải được cài đặt và thêm vào PATH hệ thống để xử lý video/audio.
+- **Ollama (Tùy chọn):** Nếu muốn sử dụng dịch thuật local.
+- **Gemini API Key (Tùy chọn):** Nếu muốn sử dụng AI của Google.
+
+## 🚀 Hướng dẫn cài đặt
+
+1. **Clone repository:**
+   ```bash
+   git clone https://github.com/Kim-Thu/subtitle-automation.git
+   cd subtitle-automation
+   ```
+
+2. **Khởi tạo môi trường ảo (Virtual Env):**
+   ```bash
+   python -m venv .venv
+   .venv\Scripts\activate  # Trên Windows
+   # source .venv/bin/activate # Trên Linux/Mac
+   ```
+
+3. **Cài đặt thư viện:**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. **Chạy ứng dụng:**
+   ```bash
+   python app.py
+   ```
+   Truy cập Dashboard tại: `http://localhost:5000`
+
+## 📖 Hướng dẫn sử dụng
+
+1. **Upload Video:** Bấm nút **Upload** trên Sidebar hoặc copy video vào thư mục `inputs/`.
+2. **Cấu hình:**
+   - Chọn **Target Language** (Ngôn ngữ muốn dịch sang).
+   - Chọn **Translation Engine** (Nên dùng Gemini AI nếu có API Key).
+   - Chọn kiểu hiển thị phụ đề (Màu sắc, Vị trí).
+3. **Xử lý:**
+   - Bấm **Process** cho từng video hoặc **Process All** để chạy hàng loạt.
+   - Theo dõi tiến độ (0% -> 100%) tại cột Metrics.
+4. **Kết quả:**
+   - Sau khi hoàn thành, trạng thái sẽ là **Done**.
+   - Bấm biểu tượng **✅** để xem Preview kết quả.
+   - Bấm nút **⬇️** để tải video đã gắn sub/lồng tiếng.
+
+## 📁 Cấu trúc thư mục
+
+- `inputs/`: Chứa video gốc (mỗi video một thư mục).
+- `outputs/`: Chứa video thành phẩm đã xử lý.
+- `temp/`: Chứa các file phụ đề tạm thời (.srt).
+- `static/`: Chứa CSS, JS và hình ảnh giao diện.
+- `templates/`: Chứa các trang HTML.
+
+---
+*Phát triển bởi Kim-Thu. Sử dụng công nghệ Whisper, Gemini & FFmpeg.*
