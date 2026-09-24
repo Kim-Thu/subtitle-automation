@@ -16,6 +16,7 @@ from concurrent.futures import ThreadPoolExecutor
 from flask import Flask, render_template, request, jsonify, send_from_directory
 # Use modular pipeline instead of legacy script
 from modules.workflow import process_video_pipeline
+from modules.utils import resolve_managed_path, normalize_relative_path
 
 # Import Gemini client (optional)
 try:
@@ -64,10 +65,8 @@ def processing_worker(task_id, video_filename, output_filename, target_lang, mod
     start_time = time.time()
     temp_srt_path = None
     try:
-        # Pre-flight checks
-        # Sanitize path: prevent traversal
-        if ".." in video_filename or video_filename.startswith("/") or video_filename.startswith("\\") or ":" in video_filename:
-             raise ValueError("Invalid video file path")
+        # Resolve the requested input inside the managed input directory.
+        safe_video_rel = normalize_relative_path(video_filename)
         
         task_status[task_id] = {
             "status": "processing", 
@@ -83,12 +82,12 @@ def processing_worker(task_id, video_filename, output_filename, target_lang, mod
             if msg is not None:
                 task_status[task_id]["message"] = msg
         
-        video_path = os.path.join(INPUT_DIR, video_filename)
+        video_path = resolve_managed_path(INPUT_DIR, safe_video_rel)
         if not os.path.exists(video_path):
              raise FileNotFoundError(f"Video not found: {video_path}")
         
         # Determine subdirectory structure
-        rel_dir = os.path.dirname(video_filename)
+        rel_dir = os.path.dirname(safe_video_rel)
         
         # Create output dirs relative to structure
         current_output_dir = os.path.join(OUTPUT_DIR, rel_dir)
@@ -135,23 +134,13 @@ def processing_worker(task_id, video_filename, output_filename, target_lang, mod
         # The pipeline returns the path to the burned video (usually in /subtitled)
         default_output = output_video_path
         
-        # Target output logic
-        # Normalize output_filename slashes
-        output_filename = output_filename.replace("/", os.sep).replace("\\", os.sep)
-        
-        target_output = None
-        if os.path.isabs(output_filename):
-             target_output = output_filename # Discouraged but allowed if user explicitly requests? Better to sanitize.
-             # Actually, for web security, we should probably force relative path.
-             pass 
+        # Target output must remain inside OUTPUT_DIR.
+        safe_output_rel = normalize_relative_path(output_filename)
+        if os.path.dirname(safe_output_rel):
+            target_rel = safe_output_rel
         else:
-             # If output_filename already has directory components (e.g. "series/video.mp4")
-             if os.path.dirname(output_filename):
-                 # Relative to root OUTPUT_DIR
-                 target_output = os.path.join(OUTPUT_DIR, output_filename)
-             else:
-                 # Relative to current video dir (flat filename)
-                 target_output = os.path.join(current_output_dir, output_filename)
+            target_rel = os.path.join(rel_dir, safe_output_rel) if rel_dir else safe_output_rel
+        target_output = resolve_managed_path(OUTPUT_DIR, target_rel)
 
         if target_output:
             if not target_output.lower().endswith(".mp4"):
