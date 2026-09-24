@@ -114,6 +114,29 @@ class FFmpegUtils:
                     pass
 
     @staticmethod
+    def replace_audio(video_path, dub_audio_path, output_path):
+        """
+        Replaces the video's audio track with the generated dub track.
+        """
+        try:
+            input_video = ffmpeg.input(video_path)
+            input_dub = ffmpeg.input(dub_audio_path)
+
+            stream = ffmpeg.output(
+                input_video.video,
+                input_dub.audio,
+                output_path,
+                vcodec='copy',
+                acodec='aac',
+                shortest=None
+            )
+            ffmpeg.run(stream, overwrite_output=True, quiet=True)
+            return True
+        except ffmpeg.Error as e:
+            safe_print(f"Audio replacement error: {e}")
+            return False
+
+    @staticmethod
     def mix_audio(video_path, dub_audio_path, output_path, original_volume=0.02):
         """
         Mixes dub audio with original video audio (ducking original heavily).

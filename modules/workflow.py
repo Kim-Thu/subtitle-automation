@@ -107,11 +107,18 @@ def process_video_pipeline(video_path, output_dir, temp_dir, target_lang="vi",
         success = DubbingService.generate_dubbing(srt_target_path, audio_path, voice=voice)
         if success:
             dubbed_video = os.path.join(dub_dir, f"{base_name}_dubbed.mp4")
-            if FFmpegUtils.mix_audio(output_video, audio_path, dubbed_video):
-                final_output = dubbed_video
-                safe_print(f"Dubbed Video: {dubbed_video}")
+            if audio_merge:
+                audio_ok = FFmpegUtils.mix_audio(output_video, audio_path, dubbed_video)
+                audio_mode = "mixed"
             else:
-                safe_print(f"[{base_name}] Audio mixing failed; keeping subtitled output.")
+                audio_ok = FFmpegUtils.replace_audio(output_video, audio_path, dubbed_video)
+                audio_mode = "replaced"
+
+            if audio_ok:
+                final_output = dubbed_video
+                safe_print(f"Dubbed Video ({audio_mode} audio): {dubbed_video}")
+            else:
+                safe_print(f"[{base_name}] Dub audio processing failed; keeping subtitled output.")
             
     safe_print(f"[{base_name}] Pipeline Finished.")
     if progress_callback: progress_callback(100, "Done")
