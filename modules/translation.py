@@ -5,6 +5,19 @@ from typing import List, Optional
 from deep_translator import GoogleTranslator
 from .utils import safe_print
 
+LANGUAGE_NAMES = {
+    "vi": "Vietnamese",
+    "en": "English",
+    "zh": "Chinese",
+    "zh-CN": "Simplified Chinese",
+    "zh-TW": "Traditional Chinese",
+    "ja": "Japanese",
+    "ko": "Korean",
+}
+
+def get_language_name(language_code: str) -> str:
+    return LANGUAGE_NAMES.get(language_code, language_code)
+
 try:
     from google import genai
     GEMINI_AVAILABLE = True
@@ -62,10 +75,6 @@ class GeminiTranslatorWrapper(BaseTranslator):
         self.total_input_tokens = 0
         self.total_output_tokens = 0
         
-        self.lang_names = {
-            "vi": "Vietnamese", "en": "English", "zh": "Chinese", "ja": "Japanese"
-        }
-
         if not self.api_key or not GEMINI_AVAILABLE:
             self.disabled = True
             return
@@ -82,13 +91,18 @@ class GeminiTranslatorWrapper(BaseTranslator):
             self.disabled = True
 
     def _get_system_prompt(self) -> str:
-        target = self.lang_names.get(self.target_lang, self.target_lang)
-        return f"""You are a professional movie subtitle translator. Translate Chinese to {target}.
+        target = get_language_name(self.target_lang)
+        vietnamese_name_rule = (
+            "\n3. For Chinese names translated to Vietnamese, prefer established Hán-Việt readings when appropriate."
+            if self.target_lang == "vi"
+            else ""
+        )
+        return f"""You are a professional movie subtitle translator.
+Translate the provided subtitle text into {target}. Detect the source language from the input instead of assuming a fixed source language.
 RULES:
 1. Translate naturally for movie dialogue (conversational).
-2. Keep it concise.
-3. Convert names to local equivalents (Hán Việt for Chinese->Vietnamese).
-4. Output ONLY the translation.
+2. Keep it concise.{vietnamese_name_rule}
+3. Output ONLY the translation.
 """
 
     def _generate(self, prompt: str) -> str:
@@ -151,6 +165,7 @@ RULES:
 class OllamaTranslator(BaseTranslator):
     def __init__(self, model="qwen:7b", target_lang='vi'):
         self.model = model
+        self.target_lang = target_lang
         self.api_url = "http://localhost:11434/api/chat"
         self.fallback = GoogleTranslatorWrapper(target_lang=target_lang)
         self.disabled = False
@@ -167,7 +182,7 @@ class OllamaTranslator(BaseTranslator):
             resp = requests.post(self.api_url, json={
                 "model": self.model,
                 "messages": [{
-                    "role": "system", "content": "Translate to Vietnamese. Output ONLY translation."
+                    "role": "system", "content": f"Translate the provided text into {get_language_name(self.target_lang)}. Detect the source language automatically. Output ONLY the translation."
                 }, {
                     "role": "user", "content": text
                 }],
