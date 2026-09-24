@@ -10,9 +10,7 @@
 <body>
     <nav class="navbar">
       <div class="nav-container">
-        <a href="/" class="brand">
-          <span>🎬</span> Subtitle Automation
-        </a>
+        <a href="/" class="brand"><span>🎬</span> Subtitle Automation</a>
         <div class="nav-links">
           <a href="/">Dashboard</a>
           <a href="/documentation" class="active">Documentation</a>
@@ -30,42 +28,47 @@
         <main class="content-card">
             <section class="support-section">
                 <h2 class="support-heading accent">Getting Started</h2>
-                <p>Welcome to Auto Subtitle Pro. This tool automates the process of generating subtitles and dubbing for your videos.</p>
+                <p>Auto Subtitle Pro generates subtitles, translations and optional dubbing for supported video files.</p>
                 <ol class="faq-item" style="margin-left: 1.5rem; margin-top: 1rem;">
-                    <li>Place your video files in the <code>inputs</code> folder.</li>
-                    <li>Refresh the dashboard list.</li>
-                    <li>Select translation engine and target language.</li>
-                    <li>Click <b>Process</b> on individual videos or <b>Process All</b> for batch execution.</li>
+                    <li>Upload a supported video or place it inside <code>inputs</code>.</li>
+                    <li>Refresh the dashboard if needed.</li>
+                    <li>Select Whisper model, translation engine, target language and subtitle style.</li>
+                    <li>Click <b>Process</b> for one video or <b>Process All</b> for batch execution.</li>
                 </ol>
+                <p class="text-secondary">Supported containers: <code>.mp4</code>, <code>.avi</code>, <code>.mov</code>, <code>.mkv</code>, <code>.webm</code>.</p>
             </section>
 
             <section class="support-section">
                 <h2 class="support-heading accent">Translation Engines</h2>
                 <ul class="faq-item" style="list-style: none; padding: 0;">
-                    <li class="content-card" style="margin-bottom: 1rem; padding: 1rem;">
-                        <strong>Google Translate:</strong> Free, reliable, good for general purpose. No API key required.
-                    </li>
-                    <li class="content-card" style="margin-bottom: 1rem; padding: 1rem;">
-                        <strong>✨ Gemini AI:</strong> High quality, context-aware translations. Requires a Google AI Studio API Key.
-                    </li>
-                    <li class="content-card" style="margin-bottom: 1rem; padding: 1rem;">
-                        <strong>Ollama Local:</strong> Private, runs locally. Requires Ollama installed and running (default port 11434).
-                    </li>
+                    <li class="content-card" style="margin-bottom: 1rem; padding: 1rem;"><strong>Google Translate:</strong> General-purpose translation with automatic source-language detection.</li>
+                    <li class="content-card" style="margin-bottom: 1rem; padding: 1rem;"><strong>✨ Gemini AI:</strong> Context-aware subtitle translation. Requires a Gemini API key.</li>
+                    <li class="content-card" style="margin-bottom: 1rem; padding: 1rem;"><strong>Ollama Local:</strong> Local translation through an Ollama model running on the default local service.</li>
+                </ul>
+            </section>
+
+            <section class="support-section">
+                <h2 class="support-heading accent">Dubbing & Audio Merge</h2>
+                <ul class="faq-item" style="margin-left: 1.5rem;">
+                    <li><strong>Dubbing enabled:</strong> Generates a dub track with Microsoft Edge TTS.</li>
+                    <li><strong>Audio Merge ON:</strong> Mixes the dub track with the original audio at reduced original volume.</li>
+                    <li><strong>Audio Merge OFF:</strong> Replaces the original audio track with the generated dub track.</li>
+                    <li><strong>Final output:</strong> When dubbing succeeds, the dubbed video becomes the final downloadable artifact.</li>
                 </ul>
             </section>
 
             <section>
-                <h2 class="support-heading accent">Features</h2>
+                <h2 class="support-heading accent">Current Feature Status</h2>
                 <ul class="faq-item" style="margin-left: 1.5rem;">
-                    <li><strong>Smart Subtitling:</strong> Uses OpenAI Whisper for accurate speech-to-text.</li>
-                    <li><strong>Auto Dubbing:</strong> Generates AI voiceovers using Microsoft Edge TTS (multilingual support).</li>
-                    <li><strong>Manual Scripting:</strong> You can supply your own script to correct transcription errors before translation.</li>
-                    <li><strong>Audio Merge:</strong> Automatically mixes the new dub track with the original background audio (ducking).</li>
+                    <li><strong>Smart Subtitling:</strong> Whisper speech-to-text is the primary transcription flow.</li>
+                    <li><strong>Manual Inputs:</strong> Existing SRT or manual script content can be used during processing.</li>
+                    <li><strong>OCR:</strong> Present in the repository but currently experimental/legacy and not a supported primary web workflow.</li>
+                    <li><strong>Processing Queue:</strong> Backend processing uses a bounded worker pool; excess jobs remain queued.</li>
                 </ul>
             </section>
         </main>
-
     </div>
+
     <div class="footer-wrapper">
       <div class="nav-container">
         <footer class="app-footer">

@@ -6,19 +6,20 @@ Auto Subtitle Pro là công cụ tự động hóa quy trình tạo phụ đề,
 
 ## 🌟 Tính năng nổi bật
 
-- **Tự động tạo phụ đề:** Sử dụng OpenAI Whisper để chuyển đổi giọng nói thành văn bản chính xác.
-- **Dịch thuật đa năng:** Hỗ trợ Google Translate, Gemini AI (chất lượng cao) và Ollama (chạy local bảo mật).
-- **Lồng tiếng AI (Dubbing):** Tự động tạo giọng đọc AI bằng Microsoft Edge TTS.
-- **Trộn âm thanh (Audio Merge):** Tự động mix giọng lồng tiếng với nhạc nền của video gốc.
-- **Chỉnh sửa thủ công:** Cho phép sửa lại kịch bản (Script) hoặc upload file SRT có sẵn.
-- **Quản lý file thông minh:** Mỗi video upload lên được lưu trong một thư mục riêng biệt tại `inputs/`.
+- **Tự động tạo phụ đề:** Sử dụng OpenAI Whisper để chuyển đổi giọng nói thành văn bản.
+- **Dịch thuật đa engine:** Hỗ trợ Google Translate, Gemini AI và Ollama chạy local.
+- **Lồng tiếng AI (Dubbing):** Tạo giọng đọc bằng Microsoft Edge TTS.
+- **Audio Merge:** Khi bật, giọng dub được mix với audio gốc; khi tắt, audio gốc được thay bằng track dub.
+- **Chỉnh sửa thủ công:** Cho phép dùng script hoặc SRT có sẵn trước khi render.
+- **Quản lý file theo video:** Mỗi video upload được lưu trong workspace riêng bên trong `inputs/`.
 
 ## 🛠 Yêu cầu hệ thống
 
 - **Python:** 3.9 trở lên.
-- **FFmpeg:** Phải được cài đặt và thêm vào PATH hệ thống để xử lý video/audio.
-- **Ollama (Tùy chọn):** Nếu muốn sử dụng dịch thuật local.
-- **Gemini API Key (Tùy chọn):** Nếu muốn sử dụng AI của Google.
+- **FFmpeg:** Cần được cài đặt và có trong PATH, hoặc đặt executable phù hợp trong thư mục `bin/`.
+- **Ollama (tùy chọn):** Cần khi dùng dịch local.
+- **Gemini API Key (tùy chọn):** Cần khi dùng Gemini.
+- **Định dạng video hỗ trợ:** `.mp4`, `.avi`, `.mov`, `.mkv`, `.webm`.
 
 ## 🚀 Hướng dẫn cài đặt
 
@@ -28,14 +29,14 @@ Auto Subtitle Pro là công cụ tự động hóa quy trình tạo phụ đề,
    cd subtitle-automation
    ```
 
-2. **Khởi tạo môi trường ảo (Virtual Env):**
+2. **Khởi tạo môi trường ảo:**
    ```bash
    python -m venv .venv
-   .venv\Scripts\activate  # Trên Windows
-   # source .venv/bin/activate # Trên Linux/Mac
+   .venv\Scripts\activate  # Windows
+   # source .venv/bin/activate  # Linux/macOS
    ```
 
-3. **Cài đặt thư viện:**
+3. **Cài đặt dependencies:**
    ```bash
    pip install -r requirements.txt
    ```
@@ -44,40 +45,53 @@ Auto Subtitle Pro là công cụ tự động hóa quy trình tạo phụ đề,
    ```bash
    python app.py
    ```
+
    Truy cập Dashboard tại: `http://localhost:5000`
 
 ## 📖 Hướng dẫn sử dụng
 
-1. **Upload Video:** Bấm nút **Upload** trên Sidebar hoặc copy video vào thư mục `inputs/`.
-2. **Cấu hình:**
-   - Chọn **Target Language** (Ngôn ngữ muốn dịch sang).
-   - Chọn **Translation Engine** (Nên dùng Gemini AI nếu có API Key).
-   - Chọn kiểu hiển thị phụ đề (Màu sắc, Vị trí).
-3. **Xử lý:**
-   - Bấm **Process** cho từng video hoặc **Process All** để chạy hàng loạt.
-   - Theo dõi tiến độ (0% -> 100%) tại cột Metrics.
-4. **Kết quả:**
-   - Sau khi hoàn thành, trạng thái sẽ là **Done**.
-   - Bấm biểu tượng **✅** để xem Preview kết quả.
-   - Bấm nút **⬇️** để tải video đã gắn sub/lồng tiếng.
+1. **Upload video:** Dùng nút **Upload** hoặc đặt video vào thư mục `inputs/`.
+2. **Cấu hình:** Chọn target language, translation engine, Whisper model và subtitle style.
+3. **Xử lý:** Nhấn **Process** cho từng video hoặc **Process All**.
+4. **Dubbing:** Nếu bật dubbing, ứng dụng tạo track dub và dùng **Audio Merge** để quyết định mix với audio gốc hay thay audio gốc.
+5. **Kết quả:** Khi dubbing thành công, file dubbed là output cuối; nếu không bật dubbing thì output cuối là video đã burn subtitle.
 
 ## 📁 Cấu trúc thư mục
 
-- `inputs/`: Chứa video gốc (mỗi video một thư mục).
-- `outputs/`: Chứa video thành phẩm đã xử lý.
-- `temp/`: Chứa các file phụ đề tạm thời (.srt).
-- `static/`: Chứa CSS, JS và hình ảnh giao diện.
-- `templates/`: Chứa các trang HTML.
+- `inputs/`: Video gốc, theo workspace của từng video.
+- `outputs/<video>/subtitled/`: Video đã burn subtitle.
+- `outputs/<video>/dubbed/`: Video đã lồng tiếng.
+- `outputs/<video>/audios/`: Track audio dub được tạo trong quá trình xử lý.
+- `temp/<video>/`: SRT và file tạm.
+- `static/`: CSS, JavaScript và assets giao diện.
+- `templates/`: Các trang HTML.
+- `tests/`: Test cho các thành phần core.
 
-## 🤝 Project status & contributions
+## ⚠️ Trạng thái tính năng
 
-Auto Subtitle Pro is currently a **personal, non-commercial open-source project** that I build for learning, experimentation, and portfolio purposes. It is **not a funded project and there are currently no paid roles attached to this repository**.
+- OCR hiện vẫn là phần **experimental / legacy** và chưa phải flow chính của web app.
+- Các job xử lý được giới hạn bởi worker pool thay vì tạo thread không giới hạn.
+- Một số tính năng lớn như subtitle timeline editor, dubbing timeline nâng cao và workspace UI mới vẫn đang được phát triển theo các issue mở.
 
-Contributions are very welcome, but they are voluntary. If you are interested in helping, please feel free to pick up an open issue or discuss an idea first. There is absolutely no expectation to contribute if you are looking specifically for paid work.
+## 🤝 Đóng góp & Công việc có trả phí
 
-If paid collaboration ever becomes available in the future, it will be stated explicitly in the relevant issue or project announcement.
+Auto Subtitle Pro hiện là **dự án mã nguồn mở cá nhân**, được phát triển phục vụ việc học tập, thử nghiệm và xây dựng portfolio. Dự án **hiện chưa có tài trợ và chưa có vị trí cộng tác có trả phí**.
 
-> **Tiếng Việt:** Đây hiện là dự án cá nhân, không thương mại và chưa có ngân sách cho vị trí trả phí. Mọi đóng góp đều hoàn toàn tự nguyện. Nếu sau này có hạng mục cộng tác có trả phí, thông tin sẽ được ghi rõ.
+Mọi đóng góp đều được hoan nghênh nhưng hoàn toàn tự nguyện. Bạn có thể nhận một issue đang mở, đề xuất ý tưởng hoặc tạo pull request.
+
+Nếu muốn phát triển theo hướng riêng, bạn cũng có thể **fork repository và xây dựng phiên bản của riêng mình**, theo giấy phép của dự án.
+
+Nếu bạn đang tìm công việc có trả phí, bạn không cần cảm thấy có nghĩa vụ phải đóng góp. Nếu sau này có cơ hội cộng tác trả phí, thông tin sẽ được ghi rõ trong issue hoặc thông báo của dự án.
+
+### Contributions & Paid Work
+
+Auto Subtitle Pro is currently a **personal open-source project** built for learning, experimentation, and portfolio purposes. It is **not funded, and there are currently no paid roles associated with this repository**.
+
+Contributions are always welcome, but entirely voluntary. You are welcome to pick up an open issue, propose an idea, or open a pull request.
+
+You are also welcome to **fork the repository and build your own version**, in accordance with the project license.
+
+If you are specifically looking for paid work, please do not feel any obligation to contribute. If paid collaboration becomes available in the future, it will be stated explicitly.
 
 ---
-*Phát triển bởi Kim-Thu. Sử dụng công nghệ Whisper, Gemini & FFmpeg.*
+*Phát triển bởi Kim-Thu. Sử dụng Whisper, Gemini, Ollama, Edge TTS & FFmpeg.*
