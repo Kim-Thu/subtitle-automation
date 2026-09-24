@@ -1,7 +1,7 @@
 import os
 import shutil
 from werkzeug.utils import secure_filename
-from .utils import safe_print
+from .utils import safe_print, normalize_relative_path, resolve_managed_path
 
 class VideoFileManager:
     """
@@ -159,12 +159,18 @@ class VideoFileManager:
         try:
             # Filename is relative path: Folder/Video.mp4
             if not self.temp_dir: return False
-            
-            rel_dir = os.path.dirname(filename)
-            base_name = os.path.splitext(os.path.basename(filename))[0]
+
+            safe_filename = normalize_relative_path(filename)
+            # Validate the referenced input location as well, even if the file no longer exists.
+            resolve_managed_path(self.base_input_dir, safe_filename)
+
+            rel_dir = os.path.dirname(safe_filename)
+            base_name = os.path.splitext(os.path.basename(safe_filename))[0]
             
             # 1. Delete SRTs in temp
-            target_temp_dir = os.path.join(self.temp_dir, rel_dir)
+            target_temp_dir = resolve_managed_path(self.temp_dir, rel_dir or base_name)
+            if not rel_dir:
+                target_temp_dir = os.path.abspath(self.temp_dir)
             if os.path.exists(target_temp_dir):
                 for f in os.listdir(target_temp_dir):
                     if f.startswith(base_name) and f.endswith(('.srt', '.ass', '.txt')):
@@ -173,9 +179,9 @@ class VideoFileManager:
             # 2. Delete generated output artifacts using the pipeline's nested layout.
             if self.output_dir:
                  artifact_paths = [
-                     os.path.join(self.output_dir, rel_dir, "subtitled", f"{base_name}_subtitled.mp4"),
-                     os.path.join(self.output_dir, rel_dir, "dubbed", f"{base_name}_dubbed.mp4"),
-                     os.path.join(self.output_dir, rel_dir, "audios", f"{base_name}_dub.mp3"),
+                     resolve_managed_path(self.output_dir, os.path.join(rel_dir, "subtitled", f"{base_name}_subtitled.mp4")),
+                     resolve_managed_path(self.output_dir, os.path.join(rel_dir, "dubbed", f"{base_name}_dubbed.mp4")),
+                     resolve_managed_path(self.output_dir, os.path.join(rel_dir, "audios", f"{base_name}_dub.mp3")),
                  ]
                  for artifact_path in artifact_paths:
                      if os.path.exists(artifact_path):
