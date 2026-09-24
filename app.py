@@ -1,5 +1,6 @@
 import os
 import sys
+import atexit
 import threading
 
 # Add local 'bin' folder to PATH for FFmpeg
@@ -54,8 +55,9 @@ os.makedirs(TEMP_DIR, exist_ok=True)
 
 task_status = {}  # taskId -> {status, message, progress, duration, output_file}
 
-# Worker pool for parallel video processing
+# Worker pool for bounded parallel video processing.
 video_executor = ThreadPoolExecutor(max_workers=MAX_WORKERS)
+atexit.register(video_executor.shutdown, wait=False, cancel_futures=True)
 
 
 # Background Worker
@@ -394,13 +396,14 @@ def process():
     task_id = str(uuid.uuid4())
     task_status[task_id] = {"status": "queued", "message": "Queued", "progress": 0, "duration": "..."}
     
-    # Start thread (consider using video_executor for better pool management)
-    thread = threading.Thread(target=processing_worker, args=(
-        task_id, filename, new_name, target_lang, model_size, translation_engine, ollama_model, 
+    # Submit to the bounded worker pool. Tasks beyond MAX_WORKERS remain queued
+    # until a worker becomes available.
+    video_executor.submit(
+        processing_worker,
+        task_id, filename, new_name, target_lang, model_size, translation_engine, ollama_model,
         dubbing_enabled, voice, audio_merge, manual_srt, manual_script, skip_transcription,
         gemini_api_key, subtitle_color, subtitle_position, subtitle_bg_opacity
-    ))
-    thread.start()
+    )
     
     return jsonify({"task_id": task_id})
 
