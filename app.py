@@ -15,6 +15,7 @@ import whisper
 import requests # Added for Ollama proxy
 from concurrent.futures import ThreadPoolExecutor
 from flask import Flask, render_template, request, jsonify, send_from_directory
+from werkzeug.exceptions import RequestEntityTooLarge
 # Use modular pipeline instead of legacy script
 from modules.workflow import process_video_pipeline
 from modules.utils import resolve_managed_path, normalize_relative_path
@@ -36,7 +37,12 @@ INPUT_DIR = "inputs"
 OUTPUT_DIR = "outputs"
 TEMP_DIR = "temp"
 MAX_WORKERS = int(os.environ.get("MAX_WORKERS", "3"))  # Max concurrent video processing
+MAX_UPLOAD_MB = int(os.environ.get("MAX_UPLOAD_MB", "2048"))
+MAX_UPLOAD_BYTES = MAX_UPLOAD_MB * 1024 * 1024
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "")  # Default Gemini API key from env
+
+# Flask rejects oversized request bodies before they reach the upload handler.
+app.config["MAX_CONTENT_LENGTH"] = MAX_UPLOAD_BYTES
 
 # Ensure directories
 os.makedirs(INPUT_DIR, exist_ok=True)
@@ -87,6 +93,11 @@ def processing_worker(task_id, video_filename, output_filename, target_lang, mod
         video_path = resolve_managed_path(INPUT_DIR, safe_video_rel)
         if not os.path.exists(video_path):
              raise FileNotFoundError(f"Video not found: {video_path}")
+
+        # Validate manually-added files too, not just files uploaded through the UI.
+        media_validation = file_manager.validate_media(video_path)
+        if not media_validation["success"]:
+            raise ValueError(media_validation["error"])
         
         # Determine subdirectory structure
         rel_dir = os.path.dirname(safe_video_rel)
@@ -241,7 +252,20 @@ def serve_output_video(filename):
 from modules.file_manager import VideoFileManager
 
 # Initialize Manager
-file_manager = VideoFileManager(INPUT_DIR, OUTPUT_DIR, TEMP_DIR)
+file_manager = VideoFileManager(
+    INPUT_DIR,
+    OUTPUT_DIR,
+    TEMP_DIR,
+    max_upload_bytes=MAX_UPLOAD_BYTES,
+)
+
+@app.errorhandler(RequestEntityTooLarge)
+def handle_upload_too_large(_error):
+    return jsonify({
+        "success": False,
+        "error": f"Upload exceeds the configured {MAX_UPLOAD_MB} MB size limit"
+    }), 413
+
 
 @app.route('/api/upload', methods=['POST'])
 def upload_video():

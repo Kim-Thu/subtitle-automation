@@ -36,6 +36,8 @@
                     <li>Click <b>Process</b> for one video or <b>Process All</b> for batch execution.</li>
                 </ol>
                 <p class="text-secondary">Supported containers: <code>.mp4</code>, <code>.avi</code>, <code>.mov</code>, <code>.mkv</code>, <code>.webm</code>.</p>
+                <p class="text-secondary">Supported video codecs: H.264, H.265/HEVC, MPEG-4, VP8, VP9 and AV1. Uploads are validated with FFprobe before processing.</p>
+                <p class="text-secondary">Default upload limit: <code>2048 MB</code> per request. Override it with the <code>MAX_UPLOAD_MB</code> environment variable.</p>
             </section>
 
             <section class="support-section">
