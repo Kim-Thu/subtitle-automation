@@ -10,9 +10,7 @@
 <body>
     <nav class="navbar">
       <div class="nav-container">
-        <a href="/" class="brand">
-          <span>🎬</span> Subtitle Automation
-        </a>
+        <a href="/" class="brand"><span>🎬</span> Subtitle Automation</a>
         <div class="nav-links">
           <a href="/">Dashboard</a>
           <a href="/documentation">Documentation</a>
@@ -30,33 +28,41 @@
         <main class="content-card">
             <section class="support-section">
                 <h2 class="support-heading warning">Common Issues</h2>
-                
+
                 <div class="faq-item">
                     <h3 class="faq-question">1. Videos not showing up?</h3>
-                    <p class="text-secondary">Ensure your video files are placed inside the <code>inputs</code> folder. Click the <b>Refresh List</b> button on the dashboard. The system supports .mp4, .mkv, .avi formats.</p>
+                    <p class="text-secondary">Make sure the file is inside <code>inputs</code> or uploaded through the dashboard, then refresh the list. Supported containers are .mp4, .avi, .mov, .mkv and .webm.</p>
                 </div>
 
                 <div class="faq-item">
                     <h3 class="faq-question">2. Ollama translation failed?</h3>
-                    <p class="text-secondary">Make sure Ollama is installed and running on your machine. Run <code>ollama serve</code> in your terminal. Check if the model you selected (e.g. qwen:7b) is pulled via <code>ollama list</code>.</p>
+                    <p class="text-secondary">Make sure Ollama is installed and running. Run <code>ollama serve</code> and verify the selected model is available with <code>ollama list</code>.</p>
                 </div>
 
                 <div class="faq-item">
-                    <h3 class="faq-question">3. Error during "Burning Subtitles"?</h3>
-                    <p class="text-secondary">This requires FFmpeg. Ensure FFmpeg is installed and added to your system PATH, or placed in the <code>bin</code> folder of the application.</p>
+                    <h3 class="faq-question">3. Error during "Burning Subtitles" or audio processing?</h3>
+                    <p class="text-secondary">FFmpeg is required. Ensure FFmpeg is installed and available in your system PATH, or available through the application's <code>bin</code> directory.</p>
+                </div>
+
+                <div class="faq-item">
+                    <h3 class="faq-question">4. Dubbing finished but audio is not what you expected?</h3>
+                    <p class="text-secondary">Check the Audio Merge setting. When enabled, the dub is mixed with the original audio. When disabled, the dub replaces the original audio track.</p>
+                </div>
+
+                <div class="faq-item">
+                    <h3 class="faq-question">5. Where can I find error details?</h3>
+                    <p class="text-secondary">Check the terminal window running <code>python app.py</code>. The current dashboard does not expose a dedicated Logs button.</p>
                 </div>
             </section>
 
             <section>
-                <h2 class="support-heading accent">Contact Developer</h2>
-                <p class="text-secondary">For bug reports or feature requests, please check the console logs first by clicking the "Logs" button (if available) or checking the terminal window where the app is running.</p>
-                <br>
-                <a href="https://mail.google.com/mail/?view=cm&fs=1&to=support@autosubtitle.pro&su=Issue%20Report&body=Please%20describe%20your%20issue..." target="_blank" class="btn primary">Open in Gmail</a>
-                <p class="contact-info">Or email us at: support@autosubtitle.pro</p>
+                <h2 class="support-heading accent">Bug Reports & Feature Requests</h2>
+                <p class="text-secondary">When reporting a problem, include the processing stage, selected engine/model, target language, relevant terminal error, and the smallest reproducible example you can share.</p>
+                <p class="text-secondary">Use the repository's GitHub Issues for bugs, feature requests and implementation discussions.</p>
             </section>
         </main>
-
     </div>
+
     <div class="footer-wrapper">
       <div class="nav-container">
         <footer class="app-footer">
