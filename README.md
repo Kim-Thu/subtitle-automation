@@ -20,6 +20,9 @@ Auto Subtitle Pro là công cụ tự động hóa quy trình tạo phụ đề,
 - **Ollama (tùy chọn):** Cần khi dùng dịch local.
 - **Gemini API Key (tùy chọn):** Cần khi dùng Gemini.
 - **Định dạng video hỗ trợ:** `.mp4`, `.avi`, `.mov`, `.mkv`, `.webm`.
+- **Video codec hỗ trợ:** H.264 (`h264`), H.265/HEVC (`hevc`), MPEG-4 (`mpeg4`), VP8, VP9 và AV1.
+- **Giới hạn upload mặc định:** 2048 MB mỗi request. Có thể thay đổi bằng biến môi trường `MAX_UPLOAD_MB`.
+- File upload được kiểm tra bằng **FFprobe** trước khi chấp nhận; file hỏng, không có video stream hoặc codec không hỗ trợ sẽ bị từ chối sớm.
 
 ## 🚀 Hướng dẫn cài đặt
 
