@@ -1,4 +1,5 @@
 import os
+import threading
 from .utils import safe_print
 from .transcription import TranscriptionService
 from .translation import GeminiTranslatorWrapper, GoogleTranslatorWrapper, OllamaTranslator
@@ -6,14 +7,22 @@ from .subtitle import SubtitleService
 from .ffmpeg_utils import FFmpegUtils
 from .dubbing import DubbingService
 
-# Global model cache to avoid reloading per request if using threads
+# Global model cache to avoid reloading the same Whisper model repeatedly.
+# Only one model is kept active at a time so switching sizes does not silently
+# reuse the previously loaded model or keep multiple large models in memory.
 _whisper_model = None
+_whisper_model_size = None
+_whisper_model_lock = threading.Lock()
 
 def get_whisper_model(size="small"):
-    global _whisper_model
-    if _whisper_model is None:
-        _whisper_model = TranscriptionService(size)
-    return _whisper_model
+    global _whisper_model, _whisper_model_size
+
+    with _whisper_model_lock:
+        if _whisper_model is None or _whisper_model_size != size:
+            _whisper_model = TranscriptionService(size)
+            _whisper_model_size = size
+
+        return _whisper_model
 
 def process_video_pipeline(video_path, output_dir, temp_dir, target_lang="vi", 
                            translation_engine="google", gemini_api_key=None,
