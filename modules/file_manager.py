@@ -125,20 +125,20 @@ class VideoFileManager:
                                  except:
                                      pass
                                 
-                    # Check Output Video
-                    # Output: outputs/{filename} (flattens usually?) or outputs/{rel_path}? 
-                    # Let's assume standard behavior: outputs/{subtitled_name}
+                    # Check generated output using the same nested structure as the pipeline:
+                    # outputs/<rel_dir>/subtitled/<name>_subtitled.mp4
+                    # outputs/<rel_dir>/dubbed/<name>_dubbed.mp4
                     if self.output_dir:
-                         # Preserve directory structure for output checking
-                         # rel_path is "Folder/Video.mp4"
-                         # output should be "Folder/Video_subtitled.mp4"
-                         
-                         potential_output_rel = os.path.join(rel_dir, f"{base_name}_subtitled.mp4")
-                         output_full = os.path.join(self.output_dir, potential_output_rel)
-                         
-                         if os.path.exists(output_full):
-                             has_output = True
-                             output_file = potential_output_rel.replace("\\", "/")
+                         dubbed_rel = os.path.join(rel_dir, "dubbed", f"{base_name}_dubbed.mp4")
+                         subtitled_rel = os.path.join(rel_dir, "subtitled", f"{base_name}_subtitled.mp4")
+
+                         # Prefer dubbed output when both artifacts exist.
+                         for candidate_rel in (dubbed_rel, subtitled_rel):
+                             candidate_full = os.path.join(self.output_dir, candidate_rel)
+                             if os.path.exists(candidate_full):
+                                 has_output = True
+                                 output_file = candidate_rel.replace("\\", "/")
+                                 break
 
                     videos.append({
                         "filename": rel_path_web,
@@ -170,13 +170,16 @@ class VideoFileManager:
                     if f.startswith(base_name) and f.endswith(('.srt', '.ass', '.txt')):
                         os.remove(os.path.join(target_temp_dir, f))
                         
-            # 2. Delete Output Video
-            # We guess the output name
+            # 2. Delete generated output artifacts using the pipeline's nested layout.
             if self.output_dir:
-                 potential_output = f"{base_name}_subtitled.mp4"
-                 out_path = os.path.join(self.output_dir, potential_output)
-                 if os.path.exists(out_path):
-                     os.remove(out_path)
+                 artifact_paths = [
+                     os.path.join(self.output_dir, rel_dir, "subtitled", f"{base_name}_subtitled.mp4"),
+                     os.path.join(self.output_dir, rel_dir, "dubbed", f"{base_name}_dubbed.mp4"),
+                     os.path.join(self.output_dir, rel_dir, "audios", f"{base_name}_dub.mp3"),
+                 ]
+                 for artifact_path in artifact_paths:
+                     if os.path.exists(artifact_path):
+                         os.remove(artifact_path)
                      
             return True
         except Exception as e:
