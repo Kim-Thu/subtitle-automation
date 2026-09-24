@@ -69,5 +69,15 @@ Auto Subtitle Pro là công cụ tự động hóa quy trình tạo phụ đề,
 - `static/`: Chứa CSS, JS và hình ảnh giao diện.
 - `templates/`: Chứa các trang HTML.
 
+## 🤝 Project status & contributions
+
+Auto Subtitle Pro is currently a **personal, non-commercial open-source project** that I build for learning, experimentation, and portfolio purposes. It is **not a funded project and there are currently no paid roles attached to this repository**.
+
+Contributions are very welcome, but they are voluntary. If you are interested in helping, please feel free to pick up an open issue or discuss an idea first. There is absolutely no expectation to contribute if you are looking specifically for paid work.
+
+If paid collaboration ever becomes available in the future, it will be stated explicitly in the relevant issue or project announcement.
+
+> **Tiếng Việt:** Đây hiện là dự án cá nhân, không thương mại và chưa có ngân sách cho vị trí trả phí. Mọi đóng góp đều hoàn toàn tự nguyện. Nếu sau này có hạng mục cộng tác có trả phí, thông tin sẽ được ghi rõ.
+
 ---
 *Phát triển bởi Kim-Thu. Sử dụng công nghệ Whisper, Gemini & FFmpeg.*
