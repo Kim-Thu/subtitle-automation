@@ -69,15 +69,25 @@ Auto Subtitle Pro là công cụ tự động hóa quy trình tạo phụ đề,
 - `static/`: Chứa CSS, JS và hình ảnh giao diện.
 - `templates/`: Chứa các trang HTML.
 
-## Contributions & Paid Work
+## 🤝 Đóng góp & Công việc có trả phí
 
-Auto Subtitle Pro is currently a **personal open-source project** that I build for learning, experimentation, and portfolio purposes. It is **not funded, and there are currently no paid roles associated with this repository**.
+Auto Subtitle Pro hiện là **dự án mã nguồn mở cá nhân**, được phát triển phục vụ việc học tập, thử nghiệm và xây dựng portfolio. Dự án **hiện chưa có tài trợ và chưa có vị trí cộng tác có trả phí**.
 
-Contributions are always welcome, but they are entirely voluntary. You are welcome to pick up an open issue, propose an idea, or open a pull request.
+Mọi đóng góp đều được hoan nghênh nhưng hoàn toàn tự nguyện. Bạn có thể nhận một issue đang mở, đề xuất ý tưởng hoặc tạo pull request.
 
-If you prefer to develop the project independently, you are also welcome to **fork the repository and build your own version**, in accordance with the project license.
+Nếu muốn phát triển theo hướng riêng, bạn cũng có thể **fork repository và xây dựng phiên bản của riêng mình**, theo giấy phép của dự án.
 
-If you are specifically looking for paid work, please do not feel any obligation to contribute. If paid collaboration becomes available in the future, it will be stated explicitly in the relevant issue or project announcement.
+Nếu bạn đang tìm công việc có trả phí, bạn không cần cảm thấy có nghĩa vụ phải đóng góp. Nếu sau này có cơ hội cộng tác trả phí, thông tin sẽ được ghi rõ trong issue hoặc thông báo của dự án.
+
+### Contributions & Paid Work
+
+Auto Subtitle Pro is currently a **personal open-source project** built for learning, experimentation, and portfolio purposes. It is **not funded, and there are currently no paid roles associated with this repository**.
+
+Contributions are always welcome, but entirely voluntary. You are welcome to pick up an open issue, propose an idea, or open a pull request.
+
+You are also welcome to **fork the repository and build your own version**, in accordance with the project license.
+
+If you are specifically looking for paid work, please do not feel any obligation to contribute. If paid collaboration becomes available in the future, it will be stated explicitly.
 
 ---
 *Phát triển bởi Kim-Thu. Sử dụng công nghệ Whisper, Gemini & FFmpeg.*
