@@ -1,0 +1,12 @@
+Flask>=3.0,<4
+openai-whisper>=20231117
+ffmpeg-python>=0.2,<1
+edge-tts>=6.1,<8
+requests>=2.31,<3
+deep-translator>=1.11,<2
+google-genai>=1.0,<2
+google-generativeai>=0.8,<1
+numpy>=1.26,<3
+opencv-python>=4.9,<5
+easyocr>=1.7,<2
+pytesseract>=0.3.10,<1
