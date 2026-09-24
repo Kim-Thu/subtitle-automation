@@ -92,18 +92,24 @@ class GeminiTranslatorWrapper(BaseTranslator):
 
     def _get_system_prompt(self) -> str:
         target = get_language_name(self.target_lang)
-        vietnamese_name_rule = (
-            "\n3. For Chinese names translated to Vietnamese, prefer established Hán-Việt readings when appropriate."
-            if self.target_lang == "vi"
-            else ""
+        rules = [
+            "1. Translate naturally for movie dialogue (conversational).",
+            "2. Keep it concise.",
+        ]
+        if self.target_lang == "vi":
+            rules.append(
+                "3. For Chinese names translated to Vietnamese, prefer established Hán-Việt readings when appropriate."
+            )
+        rules.append(f"{len(rules) + 1}. Output ONLY the translation.")
+
+        return (
+            "You are a professional movie subtitle translator.\n"
+            f"Translate the provided subtitle text into {target}. "
+            "Detect the source language from the input instead of assuming a fixed source language.\n"
+            "RULES:\n"
+            + "\n".join(rules)
+            + "\n"
         )
-        return f"""You are a professional movie subtitle translator.
-Translate the provided subtitle text into {target}. Detect the source language from the input instead of assuming a fixed source language.
-RULES:
-1. Translate naturally for movie dialogue (conversational).
-2. Keep it concise.{vietnamese_name_rule}
-3. Output ONLY the translation.
-"""
 
     def _generate(self, prompt: str) -> str:
         self.request_count += 1
