@@ -77,7 +77,7 @@ def processing_worker(task_id, video_filename, output_filename, target_lang, mod
             "start_time": start_time 
         }
         
-        def update_progress(pct, msg):
+        def update_progress(pct, msg=None):
             if pct is not None:
                 task_status[task_id]["progress"] = pct
             if msg is not None:
