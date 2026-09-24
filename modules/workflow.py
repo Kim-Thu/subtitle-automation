@@ -94,6 +94,8 @@ def process_video_pipeline(video_path, output_dir, temp_dir, target_lang="vi",
                                subtitle_color=subtitle_color, subtitle_position=subtitle_position, 
                                subtitle_bg_opacity=subtitle_bg_opacity)
     
+    final_output = output_video
+
     # 4. Dubbing
     if dubbing:
         if progress_callback: progress_callback(80, "Dubbing...")
@@ -105,9 +107,12 @@ def process_video_pipeline(video_path, output_dir, temp_dir, target_lang="vi",
         success = DubbingService.generate_dubbing(srt_target_path, audio_path, voice=voice)
         if success:
             dubbed_video = os.path.join(dub_dir, f"{base_name}_dubbed.mp4")
-            FFmpegUtils.mix_audio(output_video, audio_path, dubbed_video)
-            safe_print(f"Dubbed Video: {dubbed_video}")
+            if FFmpegUtils.mix_audio(output_video, audio_path, dubbed_video):
+                final_output = dubbed_video
+                safe_print(f"Dubbed Video: {dubbed_video}")
+            else:
+                safe_print(f"[{base_name}] Audio mixing failed; keeping subtitled output.")
             
     safe_print(f"[{base_name}] Pipeline Finished.")
     if progress_callback: progress_callback(100, "Done")
-    return output_video
+    return final_output
